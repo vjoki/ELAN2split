@@ -163,6 +163,7 @@ void MySAX2Handler::startElement(
                     XMLString::release(&temp);
                     temp = XMLString::transcode(attrs.getValue(i));
                     if (attribute_name == TIER_ID) {
+                        current_tier_name = temp;
                         if (target_tier_name.size() > 0) {
                             if (target_tier_name.compare(temp) == 0) {
                                 tier_selected = true;
@@ -216,18 +217,14 @@ void MySAX2Handler::endElement(
         case ANNOTATION: {
             if (myInt.text.size() > 0) {
                 ostringstream convert;   // stream used for the conversion
-                convert << myInt.id << "_" << myInt.start << "_" << myInt.stop; // << ".wav";
+                convert << std::hash<std::string>{}(current_tier_name) << "_" << myInt.id << "_" << myInt.start << "_" << myInt.stop; // << ".wav";
                 string ofname = convert.str();
                 convert.str("");
                 convert.clear();
                 // wav file is only segment id and time interval
                 fs::path owavfile = fs::path(output_folder) / fs::path(ofname + ".wav");
                 // additionally append the tier name to the text file
-                fs::path otextfile;
-                if (add_tier_name)
-                    otextfile = fs::path(output_folder) / fs::path(ofname + "_" + target_tier_name + text_suffix);
-                else
-                    otextfile = fs::path(output_folder) / fs::path(ofname + text_suffix);
+                fs::path otextfile = fs::path(output_folder) / fs::path(ofname + text_suffix);
                 ofname = owavfile.string();
 
                 convert << "sox \"" << rel_media_urls[0] << "\" \"" << ofname

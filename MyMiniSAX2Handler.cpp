@@ -45,7 +45,7 @@ void MyMiniSAX2Handler::startElement(
             XMLString::release(&temp);
             temp = XMLString::transcode(attrs.getValue(i));
             if (attribute_name == TIER_ID)
-                cout << temp << endl;
+              cout << std::hash<std::string>{}(temp) << " : " << temp << endl;
             XMLString::release(&temp);
         }
     }

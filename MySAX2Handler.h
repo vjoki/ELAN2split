@@ -131,6 +131,8 @@ public:
     // add tier name to text-output file names
     bool add_tier_name = false;
 
+    string current_tier_name;
+
     // tier selected is on when the parsed tier is selected,
     // either the first one, or the one named via command line
     bool tier_selected = false;
