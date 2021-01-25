@@ -154,8 +154,7 @@ void MySAX2Handler::startElement(
             break;
         }
         case TIER: {
-            // flag the first TIER, if no parameter given for which tier to segment, use this one
-            // else skip and wait for the right tier name to come
+            // Skip if the specific tier parameter given has been parsed, else use all tiers.
             if (!tier_selected) {
                 for (int i = 0; i < attrs.getLength(); i++) {
                     temp = XMLString::transcode(attrs.getLocalName(i));
@@ -172,7 +171,6 @@ void MySAX2Handler::startElement(
                                 parse_tier_annotation = true;
                             }
                         } else {
-                            tier_selected = true;
                             if (!quiet)
                                 cout << "Processing tier: " << temp << endl;
                             parse_tier_annotation = true;
